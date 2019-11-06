@@ -16,7 +16,20 @@ gameScene.create = function() {
     //2D cordinate system and needs to be sized accordingly
    let bg = this.add.sprite(0, 0, 'background');
    //changes origin to top-left corner
-   bg.setOrigin(0,0); 
+//    bg.setOrigin(0,0); 
+
+   //sprite in the center
+   bg.setPosition(640/2, 360/2);
+
+   //adjusting width and height
+   let gameW = this.sys.game.config.width;
+   let gameH = this.sys.game.config.height;
+   /*this = refers to gameScene. sys = system companent for 
+   game level properties. game = game objects. config =access to everything in config variable*/
+
+   console.log(gameW, gameH);
+   console.log(this);
+   //will log the gamescene and everything to do with it for more detail
 };
 
 //set the config of the game
