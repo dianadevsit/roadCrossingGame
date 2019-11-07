@@ -6,8 +6,8 @@ gameScene.init = function() {
   // player speed
   this.playerSpeed = 3;
   // enemy speed
-  this.enemyMinSpeed = 2;
-  this.enemyMaxSpeed = 4.5;
+  this.enemyMinSpeed = .5;
+  this.enemyMaxSpeed = 2.5;
   // boundaries
   this.enemyMinY = 80;
   this.enemyMaxY = 280;
@@ -40,11 +40,11 @@ gameScene.create = function() {
   //enemy group
   this.enemies = this.add.group({
       key: 'enemy',
-      repeat: 5,
+      repeat: 4,
       setXY: {
-          x: 105,
-          y: 100,
-          stepX: 75,
+          x: 115,
+          y: 190,
+          stepX: 95,
           stepY: 20
       }
   });
@@ -118,8 +118,8 @@ gameScene.update = function() {
   if (conditionUp || conditionDown) {
     enemies[i].speed *= -1;
   }
-   //treasure overlap check
-   let enemyRect = this.enemies[i].getBounds();
+    // check enemy overlap
+    let enemyRect = enemies[i].getBounds();
    //if this is true then both rectangles are over lapping
    if (Phaser.Geom.Intersects.RectangleToRectangle(playerRect, enemyRect)) {
      console.log('game over!');
