@@ -6,8 +6,8 @@ gameScene.preload = function() {
   //loading images
   this.load.image('background', 'assets/background.png');
   this.load.image('player', 'assets/player.png');
-  this.load.image('enemy1', 'assests/dragon.png')
-  this.load.image('enemy2', 'asseys/dragon.png');
+  this.load.image('enemy', 'assets/dragon.png')
+//   this.load.image('enemy2', 'assets/dragon.png');
 };
 //call after preload ends
 gameScene.create = function() {
@@ -19,12 +19,13 @@ gameScene.create = function() {
   let player = this.add.sprite(50, 180, 'player');
   let enemy1 = this.add.sprite(250, 180, 'enemy');
   //create a second enemy
-  let enemy2 = this.add.sprite(250, 180, 'enemy');
+  let enemy2 = this.add.sprite(500, 180, 'enemy');
 
 
   //flip image to face the hero
     enemy1.flipX = true;
-  // enemy1.flipY = true;
+    enemy2.flipX = true;
+    // enemy1.flipY = true;
 
   //changes origin to top-left corner
   //    bg.setOrigin(0,0); 
