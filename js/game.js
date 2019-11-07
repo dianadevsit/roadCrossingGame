@@ -14,7 +14,8 @@ gameScene.preload = function() {
   //loading images
   this.load.image('background', 'assets/background.png');
   this.load.image('player', 'assets/player.png');
-  this.load.image('enemy', 'assets/dragon.png')
+  this.load.image('enemy', 'assets/dragon.png');
+  this.load.image('goal', 'assets/treasure.png');
 //   this.load.image('enemy2', 'assets/dragon.png');
 };
 //call after preload ends
@@ -27,6 +28,11 @@ gameScene.create = function() {
 
   //will place player all the way to the right and halfway down the screen
   this.player = this.add.sprite(40, this.sys.game.config.height / 2 , 'player');
+  
+  //will place treasure middle of left side 
+  this.goal = this.add.sprite(this.sys.game.config.width - 80, this.sys.game.config.height / 2, 'goal');
+
+
 
   /*changing all variables for enemy to this so they are with the gameScene
   and I can call upon the enemy later*/
@@ -42,12 +48,15 @@ gameScene.create = function() {
 
   //changes origin to top-left corner
   //    bg.setOrigin(0,0); 
+
+
   //sprite in the center
   //dividing the number by two from the width and height
   bg.setPosition(640 / 2, 360 / 2);
   //    player.setPosition(50, 180, 'player');
   
   this.player.setScale(0.5);
+  this.goal.setScale(0.6);
 
     /* this.enemy1.scaleX = 2;
        this.enemy1.scaleY = 2;
@@ -83,8 +92,19 @@ gameScene.update = function() {
         this.player.x += this.playerSpeed; 
     }
 
+    //treasure overlap check
+    let playerRect = this.player.getBounds();
+    let treasureRect = this.goal.getBounds();
 
-   
+    //if this is true then both rectangles are over lapping
+    if(Phaser.Geom.Intersects.RectangleToRectangle(playerRect, treasureRect)) {
+        // console.log('resached goal!');
+  
+    //restart the scene when player reaches treasure instead
+    this.scene.restart();
+
+    return;
+    }
 }; 
 
 
