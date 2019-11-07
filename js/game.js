@@ -37,18 +37,32 @@ gameScene.create = function() {
   this.goal.setScale(0.6);
   /*changing all variables for enemy to this so they are with the gameScene
   and I can call upon the enemy later*/
-  this.enemy = this.add.sprite(120, this.sys.game.config.height / 2, 'enemy');
-  //flip image to face the hero
-  this.enemy.flipX = true;
-  this.enemy.setScale(0.6);
-  //create a second enemy
-  //   this.enemy2 = this.add.sprite(500, 180, 'enemy');
-  // set enemy speed
+  //enemy group
+  this.enemies = this.add.group({
+      key: 'enemy',
+      repeat: 5,
+      setXY: {
+          x: 105,
+          y: 100,
+          stepX: 75,
+          stepY: 20
+      }
+  });
+
+  //set scale for all group elements to get an array of children and scales the enemy of multiple enemies by x and y
+  Phaser.Actions.ScaleXY(this.enemies.getChildren(), -0.4, -0.4);
+  //set flipX and speed by calling a custom method to every element in the group so you can set the speed and flip properties
+  //this.enemy.getChidren will get all the group elements
+  Phaser.Actions.Call(this.enemies.getChildren(), function(enemy){
+  //flip enemy
+  enemy.flipX = true;
+  //pass the scene and sets speed
   let dir = Math.random() < 0.5 ? 1 : -1;
   let speed = this.enemyMinSpeed + Math.random() * (this.enemyMaxSpeed - this.enemyMinSpeed);
-  this.enemy.speed = dir * speed;
+  enemy.speed = dir * speed;
   //less than 0.5 will get 1 and if it is more we will get -1
   //changes origin to top-left corner
+  }, this);
   //    bg.setOrigin(0,0); 
   //sprite in the center
   //   dividing the number by two from the width and height
@@ -86,20 +100,35 @@ gameScene.update = function() {
   let treasureRect = this.goal.getBounds();
   //if this is true then both rectangles are over lapping
   if (Phaser.Geom.Intersects.RectangleToRectangle(playerRect, treasureRect)) {
-    // console.log('resached goal!');
+    console.log('reached goal!');
     //restart the scene when player reaches treasure instead
     this.scene.restart();
     return;
   }
-  // enemy movement
-  this.enemy.y += this.enemy.speed;
+  //get the enemies
+  let enemies = this.enemies.getChildren();
+  let numEnemies = enemies.length;
+  for (let i = 0; i < numEnemies; i++) {
+        // enemy movement
+  enemies[i].y += enemies[i].speed;
   // check we haven't passed min Y
-  let conditionUp = this.enemy.speed < 0 && this.enemy.y <= this.enemyMinY;
-  let conditionDown = this.enemy.speed > 0 && this.enemy.y >= this.enemyMaxY;
+  let conditionUp = enemies[i].speed < 0 && enemies[i].y <= this.enemyMinY;
+  let conditionDown = enemies[i].speed > 0 && enemies[i].y >= this.enemyMaxY;
   // if we passed the upper or lower limit, reverse
   if (conditionUp || conditionDown) {
-    this.enemy.speed *= -1;
+    enemies[i].speed *= -1;
   }
+   //treasure overlap check
+   let enemyRect = this.enemies[i].getBounds();
+   //if this is true then both rectangles are over lapping
+   if (Phaser.Geom.Intersects.RectangleToRectangle(playerRect, enemyRect)) {
+     console.log('game over!');
+     //restart the scene when player reaches treasure instead
+     this.scene.restart();
+     return;
+   }
+  }
+
 };
 //set the config of the game
 let config = {
