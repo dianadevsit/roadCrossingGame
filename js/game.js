@@ -17,14 +17,17 @@ gameScene.create = function() {
   //multiple sprite can use depth instead of inheritance
   let bg = this.add.sprite(0, 0, 'background');
   let player = this.add.sprite(50, 180, 'player');
-  let enemy1 = this.add.sprite(250, 180, 'enemy');
+
+  /*changing all variables for enemy to this so they are with the gameScene
+  and I can call upon the enemy later*/
+  this.enemy1 = this.add.sprite(250, 180, 'enemy');
   //create a second enemy
-  let enemy2 = this.add.sprite(500, 180, 'enemy');
+  this.enemy2 = this.add.sprite(500, 180, 'enemy');
 
 
   //flip image to face the hero
-    enemy1.flipX = true;
-    enemy2.flipX = true;
+    this.enemy1.flipX = true;
+    this.enemy2.flipX = true;
     // enemy1.flipY = true;
 
   //changes origin to top-left corner
@@ -34,11 +37,11 @@ gameScene.create = function() {
   bg.setPosition(640 / 2, 360 / 2);
   //    player.setPosition(50, 180, 'player');
   
-  player.setScale(0.5, 2);
-  enemy1.scaleX = 2;
-  enemy1.scaleY = 2;
-  enemy2.scaleX = 2;
-  enemy2.scaleY = 2;
+  player.setScale(0.5);
+  this.enemy1.scaleX = 2;
+  this.enemy1.scaleY = 2;
+  this.enemy2.scaleX = 2;
+  this.enemy2.scaleY = 2;
   //adjusting width and height
   //    let gameW = this.sys.game.config.width;
   //    let gameH = this.sys.game.config.height;
@@ -48,6 +51,10 @@ gameScene.create = function() {
   //    console.log(this);
   //will log the gamescene and everything to do with it for more detail
 };
+
+gameScene.update = function() {
+    this.enemy1.y += 0.1;
+}
 //set the config of the game
 let config = {
   //type is how will phaser render game in the browser
