@@ -11,6 +11,8 @@ gameScene.init = function() {
   // boundaries
   this.enemyMinY = 80;
   this.enemyMaxY = 280;
+  //we are not terminating
+  this.isTerminating = false;
 };
 //load assets
 gameScene.preload = function() {
@@ -90,6 +92,8 @@ gameScene.update = function() {
   this.player.scaleX += 0.01;
   this.player.scaleY += 0.01;
   */
+ //dont execute if we are terminating
+ if(this.isTerminating) return;
   //check for active user input
   if (this.input.activePointer.isDown) {
     // player walks
@@ -102,8 +106,8 @@ gameScene.update = function() {
   if (Phaser.Geom.Intersects.RectangleToRectangle(playerRect, treasureRect)) {
     console.log('reached goal!');
     //restart the scene when player reaches treasure instead
-    this.scene.restart();
-    return;
+   return this.gameOver();
+
   }
   //get the enemies
   let enemies = this.enemies.getChildren();
@@ -123,12 +127,23 @@ gameScene.update = function() {
    //if this is true then both rectangles are over lapping
    if (Phaser.Geom.Intersects.RectangleToRectangle(playerRect, enemyRect)) {
      console.log('game over!');
-     //restart the scene when player reaches treasure instead
-     this.scene.restart();
-     return;
+     //restart the scene when player reaches enemies instead
+     return this.gameOver();
    }
-  }
-
+}
+};
+gameScene.gameOver = function() {
+//initiated game over sequence
+this.isTerminating = true;
+//shake camera
+this.cameras.main.shake(500);
+//listen for event completion 
+this.cameras.main.on('camerashakecomplete', function(camera, effect){
+this.cameras.main.fade(500);
+}, this);
+this.cameras.main.on('camerafadeoutcomplete', function(camera, effect){
+this.scene.restart();
+}, this);
 };
 //set the config of the game
 let config = {
