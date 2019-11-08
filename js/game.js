@@ -44,8 +44,10 @@ gameScene.create = function() {
       key: 'enemy',
       repeat: 4,
       setXY: {
+        //where the first sprite in the group will start
           x: 115,
           y: 190,
+        //where the sprites will continue after the first and it will be spaced accoring to the step
           stepX: 95,
           stepY: 20
       }
